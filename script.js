@@ -8,6 +8,8 @@ let interval;
 
 let checkName = localStorage.getItem("name");
 let checkDate = localStorage.getItem("dateOfBirth");
+// Выбран localStorage так как данные нечувствительные, + человеку будет приятно через годик,
+// зайдя на сайт, увидеть поздравление, а он уже и запамятовал, когда оставлял эти данные.
 if (!checkName || !checkDate) {
     let name = prompt("input ur name:");    
     let dateOfBirth = prompt("input ur date of birth (like 12.12.22):");
