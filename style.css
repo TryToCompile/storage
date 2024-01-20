@@ -1,0 +1,19 @@
+.timer {
+    font-family: 'Share Tech Mono', monospace;
+    width:1000px;
+    height: 15%;
+    color:white;
+    font-size: 20px;
+    padding:20px;
+    margin:20px auto;
+    text-align: center;
+    border-radius: 5px;
+    background: #0f3854;
+    background: radial-gradient(ellipse at center,  #7793F8  0%, #000000 70%);
+    background-size: 100%;
+    text-shadow: 0 0 20px #19d1cb, 0 0 20px rgba(10, 175, 230, 0.7);
+}
+
+body {
+    background-color: #000000;
+}

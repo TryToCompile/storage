@@ -1,3 +1,11 @@
+const YEAR_DIVIDER = 1000 * 60 * 60 * 24 * 365;
+const MONTH_DIVIDER = 1000 * 60 * 60 * 24 * 30;
+const DAY_DIVIDER = 1000 * 60 * 60 * 24;
+const HOUR_DIVIDER = 1000 * 60 * 60;
+const MINUTE_DIVIDER = 1000 * 60;
+const SECOND_DIVIDER = 1000;
+let interval;
+
 let checkName = localStorage.getItem("name");
 let checkDate = localStorage.getItem("dateOfBirth");
 if (!checkName || !checkDate) {
@@ -10,34 +18,48 @@ if (!checkName || !checkDate) {
     } else {
         console.error('invalid date of birth');
     }
-    console.log(dateOfBirth);
 } else {
     date = new Date(checkDate);
     greet(checkName, date);
 }
 
-
 function greet(name, dateOfBirth) {
-    let curDate = new Date();
-    let age = curDate.getFullYear() - dateOfBirth.getFullYear();
-    alert('hi '+name+'!'+'\nyour age is '+age);
-    let timeLeft = dateOfBirth - curDate;
+    alert('hi '+name+'!');
     let timerElement = document.createElement('div');
     timerElement.classList.add('timer');
     document.body.append(timerElement);
-    function timer() {
-        let now = new Date();
-        let nextBirthday = new Date(now.getFullYear(),
-            dateOfBirth.getMonth(), dateOfBirth.getDate(), 0, 0, 0);
-        let years = Math.abs(now.getFullYear() - nextBirthday.getFullYear());
-        let months = Math.abs(now.getMonth() - nextBirthday.getMonth());
-        let days = Math.abs(now.getDate() - nextBirthday.getDate());
-        let hours = Math.abs(now.getHours() - nextBirthday.getHours());
-        let minutes = Math.abs(now.getMinutes() - nextBirthday.getMinutes());
-        let seconds = Math.abs(now.getSeconds() - nextBirthday.getSeconds());
-        timerElement.innerText = `${years} years ${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
-
-        setTimeout(timer,1000);
+    function timer(seconds) {
+        const now = new Date();
+        const nextBirthday = new Date(now.getFullYear(),
+        dateOfBirth.getMonth(), 
+        dateOfBirth.getDate(),
+        0, 0, 0); //dateOfBirth;
+        interval = setInterval(() => {
+            let today = new Date();
+            if (today > nextBirthday) {
+                nextBirthday.setFullYear(nextBirthday.getFullYear() + 1);
+            }   
+            let milliSecondsLeft = Math.floor((nextBirthday - today) );
+            if (milliSecondsLeft < 0 || (today.getDate() == dateOfBirth.getDate() && today.getMonth() == dateOfBirth.getMonth())) {
+                alert('Happy birthday!');
+                clearInterval(interval);
+                timerElement.remove();
+                return;
+            }
+            let years = Math.floor(milliSecondsLeft / YEAR_DIVIDER);
+            let months = Math.floor(milliSecondsLeft / MONTH_DIVIDER);
+            let remain = milliSecondsLeft % MONTH_DIVIDER;
+            let days = Math.floor(remain / DAY_DIVIDER);
+            remain = remain % DAY_DIVIDER;
+            let hours = Math.floor(remain / HOUR_DIVIDER);
+            remain = remain % HOUR_DIVIDER;
+            let minutes = Math.floor(remain / MINUTE_DIVIDER);
+            remain = remain % MINUTE_DIVIDER;
+            let seconds = Math.floor(remain / SECOND_DIVIDER);
+            remain = remain % SECOND_DIVIDER;
+            let milliseconds = remain % 1000;
+            timerElement.innerText = `${years} years ${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds ${milliseconds} milliseconds left`; 
+        },100)
     }
     timer();
 }
